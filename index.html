@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anija-Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d14;
+      --surface: #16161f;
+      --surface2: #1e1e2a;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.18);
+      --text: #f0eeff;
+      --text-muted: #8880aa;
+      --purple: #7f6ef0;
+      --purple-light: #a99df5;
+      --teal: #3ecfaa;
+      --teal-light: #7de0cc;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── 背景グリッド ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(127,110,240,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(127,110,240,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── グロー ── */
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-orb.one {
+      width: 500px; height: 500px;
+      background: rgba(127,110,240,0.12);
+      top: -120px; left: -100px;
+    }
+    .glow-orb.two {
+      width: 400px; height: 400px;
+      background: rgba(62,207,170,0.08);
+      bottom: -80px; right: -80px;
+    }
+
+    /* ── レイアウト ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── ヘッダー ── */
+    header {
+      padding: 56px 0 48px;
+      text-align: center;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .site-title {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: clamp(40px, 8vw, 72px);
+      letter-spacing: -1px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--purple-light) 50%, var(--teal-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .site-sub {
+      margin-top: 14px;
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── 区切り ── */
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 0 40px;
+    }
+
+    /* ── ゲームグリッド ── */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      padding-bottom: 80px;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .game-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      background: #0a0a12;
+    }
+    .card-thumb.knight {
+      object-fit: contain;
+      background: #0f111a;
+      padding: 16px;
+    }
+
+    .card-body {
+      padding: 20px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 99px;
+      align-self: flex-start;
+      letter-spacing: 0.06em;
+    }
+    .tag-battle {
+      background: rgba(127,110,240,0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(127,110,240,0.3);
+    }
+    .tag-word {
+      background: rgba(62,207,170,0.12);
+      color: var(--teal-light);
+      border: 1px solid rgba(62,207,170,0.25);
+    }
+
+    .card-title {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .card-title-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 8px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      flex: 1;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--purple-light);
+      transition: gap 0.15s;
+    }
+    .tag-word ~ * .card-link,
+    .game-card:has(.tag-word) .card-link {
+      color: var(--teal-light);
+    }
+    .game-card:hover .card-link { gap: 10px; }
+
+    .arrow {
+      display: inline-block;
+      font-size: 16px;
+      transition: transform 0.15s;
+    }
+    .game-card:hover .arrow { transform: translateX(3px); }
+
+    /* ── フッター ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── アニメーション ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── レスポンシブ ── */
+    @media (max-width: 480px) {
+      header { padding: 40px 0 32px; }
+      .games-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb one"></div>
+  <div class="glow-orb two"></div>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="site-title">Anija-Games</h1>
+      <p class="site-sub">言葉で遊ぶ、対戦ゲーム集</p>
+    </header>
+
+    <hr class="divider">
+
+    <main>
+      <div class="games-grid">
+
+        <a class="game-card" href="https://aiue-battle-production.up.railway.app/" target="_blank" rel="noopener">
+          <img class="card-thumb knight" src="char1.png" alt="もじちぇいす キャラクター">
+          <div class="card-body">
+            <span class="card-tag tag-battle">対戦</span>
+            <div>
+              <span class="card-title">もじちぇいす</span>
+              <span class="card-title-sub">あいうえバトル</span>
+            </div>
+            <p class="card-desc">お互いに隠した単語を50音で攻撃し合うワード対戦ゲーム。最大8人で遊べます。</p>
+            <span class="card-link">プレイする <span class="arrow">→</span></span>
+          </div>
+        </a>
+
+        <a class="game-card" href="https://empowering-liberation-production-fb30.up.railway.app/" target="_blank" rel="noopener">
+          <img class="card-thumb gojan" src="gojan_icon.png" alt="語雀 GOJAN ロゴ">
+          <div class="card-body">
+            <span class="card-tag tag-word">言葉</span>
+            <div>
+              <span class="card-title">語雀</span>
+              <span class="card-title-sub">GOJAN</span>
+            </div>
+            <p class="card-desc">ひらがな単語と麻雀が融合した新感覚ゲーム。</p>
+            <span class="card-link">プレイする <span class="arrow">→</span></span>
+          </div>
+        </a>
+
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    © 2025 Anija-Games
+  </footer>
+</body>
+</html>
